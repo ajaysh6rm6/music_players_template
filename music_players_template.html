@@ -1,0 +1,321 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+  
+ 
+ <style>
+ /*audio_container*/
+.audio_container {
+  width: auto; /*24rem;*/
+  height: auto;
+  background-color: rgba(17, 90, 178, 0.36);
+  border-radius: 5%;
+  display: flex;
+  align-items: center;
+}
+
+.audio_container .fa-solid {
+  margin: auto; /*0.5rem;*/
+  width: auto; /*0.5rem;*/
+}
+
+.audio_container .playrate {
+  font-family: 'Merriweather', serif;
+}
+
+.audio_container .audio_container_btn {
+  border-radius: 30%;
+  /*width: 2.5rem;*/
+  height: 2.5rem;
+  background-color: transparent;
+  border: none;
+  transition: 0.5s;
+  margin: auto; /*0 2px 0 0;*/
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
+
+.audio_container .play {
+  display: inline-block;
+}
+
+.audio_container .pause {
+  display: none;
+}
+
+.audio_container .mute {
+  display: inline-block;
+}
+
+.audio_container .unmute {
+  display: none;
+}
+
+.audio_container .audio_container_btn:hover > i{
+  color: #ff6b0c;
+  font-weight: 700;
+}
+
+.audio_container .audio_container_btn:hover > span{
+  color: #ff6b0c;
+  font-weight: bold;
+}
+
+.audio_container span {
+  transition: 0.3s;
+}
+
+.audio_container i {
+  transition: 0.3s;
+}
+</style>  
+
+<style>
+/*audioplayer [https://codepen.io/MaxenceClt/pen/VMOOgR]*/
+.audioplayer{
+  width: auto;
+    height: auto;
+    background-color: rgba(17, 90, 178, 0.36);
+    border-radius: 5%;
+    display: flex;
+    align-items: center;
+}
+.audioplayer .playBtn{
+  margin:auto 0 auto 10px;
+  cursor:pointer;
+}
+.audioplayer .volumeBtn{
+  margin:auto 0;
+}
+.audioplayer .progress{
+  background-color: rgba(255,255,255,0.3);
+  width:50%;
+  height:10px;
+  margin: auto 0;
+  margin-left: 10px;
+  display:flex;
+}
+.audioplayer .current{
+  width: 0px;
+  height:100%;
+  background-color: #FFF;
+}
+
+.audioplayer .volume{
+  background-color: rgba(255,255,255,0.3);
+  width:20%;
+  height:10px;
+  margin: auto 0;
+  margin-left: 10px;
+  margin-right:10px;
+  display:flex;
+}
+.audioplayer .currentVol{
+  width: 100%;
+  height:100%;
+  background-color: #FFF;
+}
+
+.audioplayer .time{
+  color:#FFF;
+  margin:auto;
+}
+</style>
+</head>
+<body>
+<!--audio_container-->
+<div class="audio_container">
+<audio type="audio/mp3" class="mus"></audio>
+  <button draggable="true" class="audio_container_btn play"><i class="fa-solid fa-play"></i></button>
+  <button draggable="true" class="audio_container_btn pause"><i class="fa-solid fa-pause"></i></button>
+  <!-- <button draggable="true" class="audio_container_btn info" id="draget"><i class="fa-solid fa-info"></i></button> -->
+  <button draggable="true" class="audio_container_btn backw"><i class="fa-solid fa-undo"></i></button>
+  <button draggable="true" class="audio_container_btn previous"><i class="fa-solid fa-backward-step"></i></button>
+  <button draggable="true" class="audio_container_btn backward"><i class="fa-solid fa-backward-fast"></i></button>
+  <button draggable="true" class="audio_container_btn playrate"><div class="playrate"></div></button>
+  <button draggable="true" class="audio_container_btn forward"><i class="fa-solid fa-forward-fast"></i></button>
+  <button draggable="true" class="audio_container_btn next"><i class="fa-solid fa-forward-step"></i></button>
+  <button draggable="true" class="audio_container_btn forw"><i class="fa-solid fa-redo"></i></button>
+  <button draggable="true" class="audio_container_btn mute"><i class="fa-solid fa-volume-up"></i></button>
+  <button draggable="true" class="audio_container_btn unmute"><i class="fa-solid fa-volume-mute"></i></button>
+</div>
+<!--audio_container-->
+<hr>
+<!--audioplayer-->
+<div class="audioplayer">
+	<i class="fa fa-play playBtn" style="color:#FFF" aria-hidden="true"></i>
+	<div class="progress">
+	  <div class="current"></div>
+	</div>
+	<span class="time">00:00/00:00</span>
+	<i class="fa fa-volume-up volumeBtn" style="color:#FFF" aria-hidden="true"></i>
+	<div class="volume">
+	  <div class="currentVol"></div>
+	</div>
+  </div>
+ <audio id="music" preload="true">
+	<source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/ogg">
+	<source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+ </audio>
+<!--audioplayer-->
+<!--["https://www.bensound.com/bensound-music/bensound-ukulele.mp3", "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", "https://www.bensound.com/bensound-music/bensound-summer.mp3"] // ["{% static 'echoapp-assets/music/' %}{{music_contents_music_path}}",]-->
+<script>
+<script>
+//audio_container
+let audio = document.querySelector('.mus')
+let play = document.querySelector('.play')
+let pause = document.querySelector('.pause')
+// let info = document.querySelector('.info')
+let fast = document.querySelector('.forward')
+let slow = document.querySelector('.backward')
+let playrate = document.querySelector('.playrate')
+let songs = ["https://www.bensound.com/bensound-music/bensound-ukulele.mp3", "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", "https://www.bensound.com/bensound-music/bensound-summer.mp3"]
+let next = document.querySelector('.next')
+let previous = document.querySelector('.previous')
+let i = 0;
+let backw = document.querySelector('.backw')
+let forw = document.querySelector('.forw')
+let mydiv = document.querySelector('.mydiv')
+let mute = document.querySelector('.mute')
+let unmute = document.querySelector('.unmute')
+
+play.addEventListener('click', function (e) {
+  play.style.display = 'none'
+  pause.style.display = 'inline-block'
+  audio.play()
+})
+pause.addEventListener('click', function () {
+  pause.style.display = 'none'
+  play.style.display = 'inline-block'
+  audio.pause()
+})
+// info.addEventListener('click', function () {
+//   console.log("length of songs : "+songs.length);
+//   console.log(songs);
+// })
+fast.addEventListener('click', function () {
+  audio.playbackRate += 0.25;
+})
+slow.addEventListener('click', function () {
+  audio.playbackRate -= 0.25;
+})
+next.addEventListener('click', function () {
+	if (songs.length>1){
+	i = (i + 1) % 3;
+	}else{
+	i = i
+	}
+  console.log(i);
+  audio.src = songs[i];
+  pause.style.display = 'inline-block'
+  play.style.display = 'none'
+  audio.play()
+})
+previous.addEventListener('click', function () {
+	if (i>0){
+	i = (i - 1) % 3;
+	}else{
+	i = i
+	}
+	console.log(i);
+  audio.src = songs[i];
+  pause.style.display = 'inline-block'
+  play.style.display = 'none'
+  audio.play()
+})
+backw.addEventListener('click', function () {
+  audio.currentTime -= 5;
+})
+forw.addEventListener('click', function () {
+  audio.currentTime += 5;
+})
+mute.addEventListener('click', function (e) {
+  mute.style.display = 'none'
+  unmute.style.display = 'inline-block'
+  audio.muted = true;
+})
+unmute.addEventListener('click', function () {
+  unmute.style.display = 'none'
+  mute.style.display = 'inline-block'
+  audio.muted = false;
+})
+setInterval(function() {
+	let current_duration = `${Math.floor(audio.currentTime / 600)}${Math.floor((audio.currentTime / 60) % 10)}:${Math.floor((audio.currentTime / 10)%6)}${Math.floor(audio.currentTime % 10)}`
+	let total_duration = `${Math.floor(audio.duration / 600)}${Math.floor((audio.duration / 60) % 10)}:${Math.floor((audio.duration / 10)%6)}${Math.floor(audio.duration % 10)}`
+  	playrate.innerHTML = current_duration
+	console.log("current duration : "+current_duration)
+	console.log("total duration : "+total_duration)
+	if (current_duration === total_duration) {
+		console.log("song completed")
+		pause.style.display = 'none'
+  		play.style.display = 'inline-block'
+	} 
+}, 1000)
+
+audio.src = songs[i]
+</script>
+</script>
+
+<script>
+// audioplayer
+var playBtn = document.querySelector(".playBtn");
+var current = document.querySelector(".current");
+var time = document.querySelector(".time");
+var music = document.getElementById("music");
+var progress = document.querySelector(".progress");
+var volumeElt = document.querySelector(".volume");
+var currentVol = document.querySelector(".currentVol");
+var volumeBtn = document.querySelector(".volumeBtn");
+
+volumeBtn.addEventListener("click", function(e) {
+	if (volumeBtn.className == "fa fa-volume-up volumeBtn") {
+		volumeBtn.className = "fa fa-volume-mute volumeBtn"
+		music.muted = true;
+  	} else {
+		volumeBtn.className = "fa fa-volume-up volumeBtn"
+		music.muted = false;
+	  }
+});
+volumeElt.addEventListener("click", function(e) {
+  var X = e.pageX - this.offsetLeft;
+  currentVol.style.width = X + "px";
+  music.volume = X / this.offsetWidth;
+});
+
+progress.addEventListener("click", function(e) {
+  var X = e.pageX - this.offsetLeft;
+  current.style.width = X + "px";
+  music.currentTime = X * music.duration / this.offsetWidth;
+});
+
+playBtn.addEventListener("click", function() {
+  if (music.paused) {
+    music.play();
+    playBtn.className = "fa fa-pause playBtn";
+  } else {
+    music.pause();
+    playBtn.className = "fa fa-play playBtn";
+  }
+});
+
+window.setInterval(function() {
+    console.log(progress.offsetWidth)
+    current.style.width = Math.round(music.currentTime) / music.duration * progress.offsetWidth + "px";
+	let current_duration = `${Math.floor(music.currentTime / 600)}${Math.floor((music.currentTime / 60) % 10)}:${Math.floor((music.currentTime / 10)%6)}${Math.floor(music.currentTime % 10)}`
+	let total_duration = `${Math.floor(music.duration / 600)}${Math.floor((music.duration / 60) % 10)}:${Math.floor((music.duration / 10)%6)}${Math.floor(music.duration % 10)}`
+  	time.innerHTML = current_duration+"/"+total_duration
+	if (current_duration === total_duration) {
+		console.log("song completed")
+		playBtn.className = "fa fa-play playBtn";
+	}
+  }, 1000);
+
+</script>
+</body>
+</html>
